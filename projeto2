@@ -1,0 +1,104 @@
+cadastrados = []
+total = 0
+conta = {}
+count = 0
+count2 = 1
+conta_corrente = []
+conta_criada = 0
+
+
+def menu():
+    print("Bem vindo ao Banco De Todos")
+    operacao = input("""Digite qual Operação você deseja fazer:
+                        [1] Depósito
+                        [2] Saque
+                        [3] Extrato
+                        [4] Sair
+                            : """).strip()[0]
+    
+    return operacao
+
+
+def depositar(valor):
+    global total
+    global count2
+    global extra
+    total += valor
+    conta[f'Depósito N({count2}°)'] = valor
+    count2 += 1
+    extra = extrato()
+    return total, extrato
+
+def saque(valor):
+    global total
+    global extra
+    if count <= 5:
+        if total > 0:
+            if valor <= 500:
+                total -= valor
+                conta[f'Saque N({count}°)'] = valor
+                extra = extrato()
+                return total, extrato
+            else:
+                return f'Valor inválido, tente novamente.'
+        else:
+            return f"Você não possui saldo sulficiente para sacar."
+    else: 
+        return f"Você ultrapassou a quantidade de Saques Diários."
+    
+def limite_num_saque():
+    global count
+    count += 1
+    return count
+
+def extrato():
+    print("***************EXTRATO******************")
+    if len(conta) == 0:
+        print("Não foi realizado nenhuma operação")
+    else:
+        for i , j in conta.items():
+            print(f"{i} : R$ {j}")
+    print("****************************************")
+        
+
+def cadastro_cliente(nome,cpf,dat_nascm,endereco):
+    if "." in cpf:
+        cpf.replace(".","")
+    cliente = {cpf : {"Nome" : nome, "Data de Nascimento" : dat_nascm, "Endereço": endereco}}
+    cadastrados.append(cliente)  
+
+def conta_corrente(usuario):
+    conta_criada += 1    
+    num_conta = "0001" +"-"+ conta_criada
+    if usuario in cadastrado[:]["cpf"]:
+        conta_corrente.append([usuario, num_conta])
+    
+    else:
+        return "Usúario não cadastrado, se cadastre primeiro!"
+    
+while True:
+        #Pedindo a opção que o usuário deseja fazer
+        operacao = menu()
+        
+   #se o usuário escolher depósito
+        if operacao == '1':
+            n = float(input("Digite o valor que deseja depositar: "))
+            depositar(n)
+            #print("Operação Realizada")
+    #se o usuário escolher saque
+        elif operacao == '2':
+            limite_num_saque()
+            n = float(input("Digite o valor que deseja sacar: "))
+            print(saque(n))
+            
+        elif operacao == '3':
+            extrato()
+            
+        #se o usuário escolher sair
+        elif operacao == '4':
+            print("Volte Sempre")
+            break
+        #se o usuário não colocar uma opção válida
+        else:
+            print("Você Digitou um Número invalido, digite novamente")
+            continue
